@@ -5,7 +5,6 @@ function Error() {
 
   //THIS CUSTOM HOOK TELLS WHAT IS THE REALTIME ERROR
   const error = useRouteError();
-  console.log(error);
 
   return (
     <div>
