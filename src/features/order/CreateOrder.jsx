@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
-import { Form, redirect, useNavigate } from "react-router-dom";
+import {
+  Form,
+  redirect,
+  useActionData,
+  useNavigate,
+  useNavigation,
+} from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
 
 // https://uibakery.io/regex-library/phone-number
@@ -35,6 +41,11 @@ const fakeCart = [
 
 function CreateOrder() {
   const cart = fakeCart;
+  const navigation = useNavigation();
+  const disable = navigation.state === "submitting";
+
+  // BY THIS HOOK WE GET THE ERROR DATA FROM OUR ACTION
+  const formErrors = useActionData();
 
   return (
     <div>
@@ -52,6 +63,7 @@ function CreateOrder() {
           <div>
             <input type="tel" name="phone" required />
           </div>
+          {formErrors?.phone && <p>{formErrors.phone}</p>}
         </div>
 
         <div>
@@ -68,7 +80,9 @@ function CreateOrder() {
 
         <div>
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <button>Order now</button>
+          <button disabled={disable}>
+            {disable ? "Placing Order..." : "Order now"}
+          </button>
         </div>
       </Form>
     </div>
@@ -85,7 +99,15 @@ export async function action({ request }) {
     cart: JSON.parse(data.cart),
     priority: data.priority === "on" ? true : false,
   };
-  console.log(order);
+
+  // THIS IS HOW YOU VALIDATE YOUR FEILDS IN FORM
+  const errors = {};
+  if (!isValidPhone(order.phone)) {
+    errors.phone =
+      "Please provide your correct phone number as we might need it to contact you";
+  }
+
+  if (Object.keys(errors).length > 0) return errors;
 
   const newOrder = await createOrder(order);
 
