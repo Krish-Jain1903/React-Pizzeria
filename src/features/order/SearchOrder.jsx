@@ -17,6 +17,7 @@ function SearchOrder() {
         placeholder="Search For Order Id"
         value={orderId}
         onChange={(e) => setOrderId(e.target.value)}
+        className="p-1"
       />
     </form>
   );
