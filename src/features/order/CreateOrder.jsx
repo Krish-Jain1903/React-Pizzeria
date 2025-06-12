@@ -48,7 +48,7 @@ function CreateOrder() {
   const formErrors = useActionData();
 
   return (
-    <div>
+    <div className="my-4 sm:my-6 md:my-8">
       <h2>Ready to order? Let's go!</h2>
 
       {/* THIS IS INBUILT FORM COMPONENT AND METHOD ATTRIBUTE IS IMPORTANT */}

@@ -8,9 +8,10 @@ function AppLayout() {
   const isLoading = navigation.state === "loading";
 
   return (
-    <div className="layout">
+    // THIS HOW YOU SET UP GRID (THESE ARE HARDCODED VALUES FOR 3 ROWS)
+    <div className="grid h-screen grid-rows-[auto_1fr_auto]">
       <Header />
-      <main>{isLoading ? <Loader /> : <Outlet />}</main>
+      <main className="owerflow-scroll max-w-3xl mx-auto">{isLoading ? <Loader /> : <Outlet />}</main>
       <CartOverview />
     </div>
   );
