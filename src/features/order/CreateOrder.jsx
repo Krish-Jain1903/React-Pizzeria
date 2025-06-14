@@ -8,6 +8,7 @@ import {
   useNavigation,
 } from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
+import Button from "../../ui/Button";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -48,48 +49,57 @@ function CreateOrder() {
   const formErrors = useActionData();
 
   return (
-    <div className="my-4 sm:my-6 md:my-8">
+    <div className="my-20 sm:my-24 md:my-28 md:text-lg">
       <h2>Ready to order? Let's go!</h2>
 
       {/* THIS IS INBUILT FORM COMPONENT AND METHOD ATTRIBUTE IS IMPORTANT */}
       <Form method="POST">
-        <div>
-          <label>First Name</label>
-          <input type="text" name="customer" required />
-        </div>
-
-        <div>
-          <label>Phone number</label>
+        <div className="py-4">
+          <label>First Name:-</label>
           <div>
-            <input type="tel" name="phone" required />
-          </div>
-          {formErrors?.phone && <p>{formErrors.phone}</p>}
-        </div>
-
-        <div>
-          <label>Address</label>
-          <div>
-            <input type="text" name="address" required />
+            <input type="text" name="customer" required className="input" />
           </div>
         </div>
 
-        <div>
-          <input type="checkbox" name="priority" id="priority" />
+        <div className="pb-4">
+          <label>Phone number:-</label>
+          <div>
+            <input type="tel" name="phone" required className="input" />
+          </div>
+          {formErrors?.phone && (
+            <p className="text-sm text-red-600">{formErrors.phone}</p>
+          )}
+        </div>
+
+        <div className="pb-4">
+          <label>Address:-</label>
+          <div>
+            <input type="text" name="address" required className="input" />
+          </div>
+        </div>
+
+        <div className="pb-4 space-x-2">
+          <input
+            type="checkbox"
+            name="priority"
+            id="priority"
+            className="size-4 accent-yellow-400"
+          />
           <label htmlFor="priority">Want to yo give your order priority?</label>
         </div>
 
         <div>
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <button disabled={disable}>
+          <Button disable={disable}>
             {disable ? "Placing Order..." : "Order now"}
-          </button>
+          </Button>
         </div>
       </Form>
     </div>
   );
 }
 
-// THIS IS THE ACTION FUNCTION JUST LIKE LOADER FUNCTION THI IS USED TO SUBMIT FORM DATA
+// THIS IS THE ACTION FUNCTION JUST LIKE LOADER FUNCTION THIS IS USED TO SUBMIT FORM DATA
 export async function action({ request }) {
   const formData = await request.formData();
   const data = Object.fromEntries(formData); // CONVERT REQUEST TO OBJECT
