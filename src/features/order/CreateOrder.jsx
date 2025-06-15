@@ -49,43 +49,47 @@ function CreateOrder() {
   const formErrors = useActionData();
 
   return (
-    <div className="my-20 sm:my-24 md:my-28 md:text-lg px-6 sm:px-12">
-      <h2>Ready to order? Let's go!</h2>
+    <div className="my-20 sm:my-24 md:text-lg px-6 sm:px-12">
+      <h2 className="text-xl mb-6 sm:text-3xl">Ready to order? Let's go!</h2>
 
       {/* THIS IS INBUILT FORM COMPONENT AND METHOD ATTRIBUTE IS IMPORTANT */}
       <Form method="POST">
-        <div className="py-4">
-          <label>First Name:-</label>
+        <div className="py-4 space-y-3 sm:flex sm:items-center sm:justify-center sm:gap-8">
+          <label className="sm:basis-36">First Name:-</label>
           <div>
             <input type="text" name="customer" required className="input" />
           </div>
         </div>
 
-        <div className="pb-4">
-          <label>Phone number:-</label>
+        <div className="pb-4 space-y-3 sm:flex sm:items-center sm:justify-center sm:gap-8">
+          <label className="sm:basis-36">Phone number:-</label>
           <div>
             <input type="tel" name="phone" required className="input" />
           </div>
-          {formErrors?.phone && (
-            <p className="text-sm text-red-600">{formErrors.phone}</p>
-          )}
         </div>
+        {formErrors?.phone && (
+          <p className="text-sm text-red-600 font-semibold bg-red-100 py-1 px-2 rounded-md">
+            {formErrors.phone}
+          </p>
+        )}
 
-        <div className="pb-4">
-          <label>Address:-</label>
+        <div className="pb-4 space-y-3 sm:flex sm:items-center sm:justify-center sm:gap-8">
+          <label className="sm:basis-36">Address:-</label>
           <div>
             <input type="text" name="address" required className="input" />
           </div>
         </div>
 
-        <div className="pb-4 space-x-2">
+        <div className="pb-4 space-x-2 sm:flex sm:items-center sm:justify-center sm:gap-2">
           <input
             type="checkbox"
             name="priority"
             id="priority"
             className="size-4 accent-yellow-400"
           />
-          <label htmlFor="priority">Want to yo give your order priority?</label>
+          <label className="font-semibold" htmlFor="priority">
+            Want to yo give your order priority?
+          </label>
         </div>
 
         <div>
@@ -114,7 +118,7 @@ export async function action({ request }) {
   const errors = {};
   if (!isValidPhone(order.phone)) {
     errors.phone =
-      "Please provide your correct phone number as we might need it to contact you";
+      "Please provide your correct phone number as we might need it to contact you !";
   }
 
   if (Object.keys(errors).length > 0) return errors;
