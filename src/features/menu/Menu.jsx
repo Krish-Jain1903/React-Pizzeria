@@ -5,7 +5,8 @@ import MenuItem from "./MenuItem";
 function Menu() {
   const menu = useLoaderData(); // APPLY FETCH LOADER (STEP 3)
   return (
-    <ul>
+    // THIS IS USED TO CREATE LINES BETWEEN CHILD ELEMENTS
+    <ul className="divide-y-2 divide-stone-200 px-4">
       {menu.map((pizza) => {
         return <MenuItem pizza={pizza} key={pizza.id} />;
       })}

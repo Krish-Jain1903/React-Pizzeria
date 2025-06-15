@@ -11,7 +11,7 @@ function AppLayout() {
     // THIS HOW YOU SET UP GRID (THESE ARE HARDCODED VALUES FOR 3 ROWS)
     <div className="grid h-screen grid-rows-[auto_1fr_auto]">
       <Header />
-      <main className="owerflow-scroll max-w-3xl">{isLoading ? <Loader /> : <Outlet />}</main>
+      <main className="owerflow-scroll max-w-3xl mx-auto">{isLoading ? <Loader /> : <Outlet />}</main>
       <CartOverview />
     </div>
   );
