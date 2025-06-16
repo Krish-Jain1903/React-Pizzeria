@@ -26,10 +26,10 @@ function Order() {
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
   return (
-    <div className="py-4 px-4 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between gap-x-3 flex-wrap">
-        <h2 className="text-lg font-semibold">Order #{id} Status</h2>
-        <div className="space-x-2">
+        <h2 className="text-lg font-semibold pl-4 pt-2">Order #{id} Status</h2>
+        <div className="space-x-2 pl-3">
           {priority && (
             <span className="bg-red-500 rounded-full py-1 px-2 text-sm uppercase font-semibold text-red-50">
               Priority
@@ -54,7 +54,7 @@ function Order() {
 
       <ul className="divide-y divide-stone-200 border-y border-stone-200">
         {cart.map((pizza) => {
-          return <OrderItem item={pizza} key={pizza.id} />;
+          return <OrderItem item={pizza} key={pizza.pizzaId} />;
         })}
       </ul>
 

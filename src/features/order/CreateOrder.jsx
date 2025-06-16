@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
+import { useSelector } from "react-redux";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -47,9 +48,10 @@ function CreateOrder() {
 
   // BY THIS HOOK WE GET THE ERROR DATA FROM OUR ACTION
   const formErrors = useActionData();
+  const username = useSelector((state) => state.user.username);
 
   return (
-    <div className="my-20 sm:my-24 md:text-lg px-6 sm:px-12">
+    <div className="my-20 sm:my-24 md:text-lg px-6 sm:px-12 sm:text-center">
       <h2 className="text-xl mb-6 sm:text-3xl">Ready to order? Let's go!</h2>
 
       {/* THIS IS INBUILT FORM COMPONENT AND METHOD ATTRIBUTE IS IMPORTANT */}
@@ -57,7 +59,13 @@ function CreateOrder() {
         <div className="py-4 space-y-3 sm:flex sm:items-center sm:justify-center sm:gap-8">
           <label className="sm:basis-36">First Name:-</label>
           <div>
-            <input type="text" name="customer" required className="input" />
+            <input
+              type="text"
+              name="customer"
+              required
+              className="input"
+              defaultValue={username}
+            />
           </div>
         </div>
 
