@@ -51,8 +51,10 @@ function CreateOrder() {
   const username = useSelector((state) => state.user.username);
 
   return (
-    <div className="my-20 sm:my-24 md:text-lg px-6 sm:px-12 sm:text-center">
-      <h2 className="text-xl mb-6 sm:text-3xl">Ready to order? Let's go!</h2>
+    <div className="my-20 sm:my-24 md:text-lg px-6 sm:px-12">
+      <h2 className="text-xl mb-6 sm:text-3xl sm:text-center">
+        Ready to order? Let's go!
+      </h2>
 
       {/* THIS IS INBUILT FORM COMPONENT AND METHOD ATTRIBUTE IS IMPORTANT */}
       <Form method="POST">
@@ -100,7 +102,7 @@ function CreateOrder() {
           </label>
         </div>
 
-        <div>
+        <div className="text-center">
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
           <Button disable={disable}>
             {disable ? "Placing Order..." : "Order now"}
