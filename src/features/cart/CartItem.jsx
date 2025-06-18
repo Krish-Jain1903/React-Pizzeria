@@ -14,7 +14,10 @@ function CartItem({ item }) {
         <p>{formatCurrency(totalPrice)}</p>
         <div className="flex gap-4 sm:gap-6">
           <DeleteItem itemId={item.pizzaId} />
-          <UpdateItemQuantity itemId={item.pizzaId} />
+          <UpdateItemQuantity
+            itemId={item.pizzaId}
+            currentQuantity={quantity}
+          />
         </div>
       </div>
     </li>
