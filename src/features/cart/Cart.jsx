@@ -17,7 +17,7 @@ function Cart() {
   if (cart.length === 0) return <EmptyCart />;
 
   return (
-    <div className="mt-20 text-sm md:text-xl sm:mt-8 mx-6 sm:mx-10">
+    <div className="mt-10 text-sm md:text-xl sm:mt-8 mx-6 sm:mx-10">
       <LinkButton to="/menu">&larr; Back to menu</LinkButton>
 
       <h2 className="mt-7 text-lg font-semibold">Your cart, {username}</h2>

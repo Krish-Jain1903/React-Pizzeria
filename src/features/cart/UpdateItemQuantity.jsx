@@ -12,6 +12,7 @@ function UpdateItemQuantity({ itemId, currentQuantity }) {
       >
         +
       </Button>
+      <span>{currentQuantity}</span>
       {currentQuantity > 1 && (
         <Button
           type="round"
