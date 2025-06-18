@@ -10,6 +10,9 @@ function Button({ children, disable = false, to = null, type = null, onClick = n
     else if(type === "secondary") {
         className = "inline-block px-3 py-2 border-2 border-stone-400 text-stone-500 hover:bg-stone-300 hover:text-stone-800 rounded-full uppercase transition-all duration-500 focus:ring focus:ring-stone-300 focus:bg-stone-300 focus:text-stone-800 focus:outline-none active:bg-stone-500 active:outline-none disabled:cursor-not-allowed sm:px-3 sm:py-2";
     }
+    else if(type === "round") {
+        className = "rounded-full w-6 h-6 sm:w-10 sm:h-10 pb-0.5 font-semibold sm:pb-1 bg-yellow-300 hover:bg-yellow-400 transition-all duration-500";
+    }
 
 
     if (to !== null ) return <Link className={className} to={to}>{children}</Link>
