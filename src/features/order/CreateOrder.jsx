@@ -10,11 +10,12 @@ import {
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
 import EmptyCart from "../../features/cart/EmptyCart";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import store from "../../store";
 import { clearCart } from "../cart/cartSlice";
 import { getTotalPrice } from "../cart/cartSlice";
 import { formatCurrency } from "../../utils/helpers.js";
+import { fetchAddress } from "../user/userSlice.js";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -26,6 +27,7 @@ function CreateOrder() {
   const cart = useSelector((state) => state.cart.cart);
   const navigation = useNavigation();
   const disable = navigation.state === "submitting";
+  const dispatch = useDispatch();
 
   // BY THIS HOOK WE GET THE ERROR DATA FROM OUR ACTION
   const formErrors = useActionData();
@@ -37,14 +39,17 @@ function CreateOrder() {
   if (cart.length === 0) return <EmptyCart />;
 
   return (
-    <div className="my-20 sm:my-24 md:text-lg px-6 sm:px-12">
+    <div className="my-20 sm:my-24 md:text-lg px-6 sm:px-12 sm:flex sm:flex-col sm:items-center sm:justify-center">
       <h2 className="text-xl mb-6 sm:text-3xl sm:text-center">
         Ready to order? Let's go!
       </h2>
+      <Button type="small" onClick={() => dispatch(fetchAddress())}>
+        Get Address
+      </Button>
 
       {/* THIS IS INBUILT FORM COMPONENT AND METHOD ATTRIBUTE IS IMPORTANT */}
       <Form method="POST">
-        <div className="py-4 space-y-3 sm:flex sm:items-center sm:justify-center sm:gap-8">
+        <div className="py-4 space-y-3 sm:flex sm:items-center sm:gap-8">
           <label className="sm:basis-36">First Name:-</label>
           <div>
             <input
@@ -57,8 +62,8 @@ function CreateOrder() {
           </div>
         </div>
 
-        <div className="pb-4 space-y-3 sm:flex sm:items-center sm:justify-center sm:gap-8">
-          <label className="sm:basis-36">Phone number:-</label>
+        <div className="pb-4 space-y-3 sm:flex sm:items-center sm:gap-8">
+          <label className="sm:basis-40">Phone number:-</label>
           <div>
             <input type="tel" name="phone" required className="input" />
           </div>
@@ -69,14 +74,14 @@ function CreateOrder() {
           </p>
         )}
 
-        <div className="pb-4 space-y-3 sm:flex sm:items-center sm:justify-center sm:gap-8">
+        <div className="pb-4 space-y-3 sm:flex sm:items-center sm:gap-8">
           <label className="sm:basis-36">Address:-</label>
           <div>
             <input type="text" name="address" required className="input" />
           </div>
         </div>
 
-        <div className="pb-4 space-x-2 sm:flex sm:items-center sm:justify-center sm:gap-2">
+        <div className="pb-4 space-x-2 sm:flex sm:items-center sm:gap-2">
           <input
             type="checkbox"
             name="priority"
