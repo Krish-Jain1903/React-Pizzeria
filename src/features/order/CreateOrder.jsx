@@ -12,9 +12,9 @@ import Button from "../../ui/Button";
 import EmptyCart from "../../features/cart/EmptyCart";
 import { useSelector } from "react-redux";
 import store from "../../store";
-import clearCart from "../cart/cartSlice";
-import { getTotalPrice }  from "../cart/cartSlice";
-import {formatCurrency} from "../../utils/helpers.js";
+import { clearCart } from "../cart/cartSlice";
+import { getTotalPrice } from "../cart/cartSlice";
+import { formatCurrency } from "../../utils/helpers.js";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -34,7 +34,7 @@ function CreateOrder() {
   const totalCartPrice = useSelector((state) => getTotalPrice(state));
   const totalOrderPrice = withPriority ? totalCartPrice + 20 : totalCartPrice;
 
-  if(cart.length === 0) return <EmptyCart />;
+  if (cart.length === 0) return <EmptyCart />;
 
   return (
     <div className="my-20 sm:my-24 md:text-lg px-6 sm:px-12">
@@ -82,7 +82,8 @@ function CreateOrder() {
             name="priority"
             id="priority"
             className="size-4 accent-yellow-400"
-            onChange = {() => setWithPriority((withPriority) => !withPriority)}
+            value={withPriority}
+            onChange={() => setWithPriority((withPriority) => !withPriority)}
           />
           <label className="font-semibold" htmlFor="priority">
             Want to yo give your order priority?
@@ -92,7 +93,9 @@ function CreateOrder() {
         <div className="text-center">
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
           <Button disable={disable}>
-            {disable ? "Placing Order..." : `Order now on ${formatCurrency(totalOrderPrice)}`}
+            {disable
+              ? "Placing Order..."
+              : `Order now on ${formatCurrency(totalOrderPrice)}`}
           </Button>
         </div>
       </Form>
@@ -123,7 +126,7 @@ export async function action({ request }) {
   const newOrder = await createOrder(order);
 
   // IN THIS WAY YOU CAN DISPATCH ACTIONS DIRECTLY USING STORE (NOT A GOOD THING :- DO IF REQUIRED)
-  store.dispatch(clearCart());  // THERE IS SOME ERROR SEE TO IT 
+  store.dispatch(clearCart());
 
   // THIS REDIRECT METHOD IS INBUILT METHOD SO THAT WE DO NOT NEED TO USE useNavigate()
   return redirect(`/order/${newOrder.id}`);
