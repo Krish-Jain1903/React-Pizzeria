@@ -9,7 +9,12 @@ import {
 } from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
+import EmptyCart from "../../features/cart/EmptyCart";
 import { useSelector } from "react-redux";
+import store from "../../store";
+import clearCart from "../cart/cartSlice";
+import { getTotalPrice }  from "../cart/cartSlice";
+import {formatCurrency} from "../../utils/helpers.js";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -17,38 +22,19 @@ const isValidPhone = (str) =>
     str
   );
 
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: "Mediterranean",
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: "Vegetale",
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: "Spinach and Mushroom",
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
-
 function CreateOrder() {
-  const cart = fakeCart;
+  const cart = useSelector((state) => state.cart.cart);
   const navigation = useNavigation();
   const disable = navigation.state === "submitting";
 
   // BY THIS HOOK WE GET THE ERROR DATA FROM OUR ACTION
   const formErrors = useActionData();
   const username = useSelector((state) => state.user.username);
+  const [withPriority, setWithPriority] = useState(false);
+  const totalCartPrice = useSelector((state) => getTotalPrice(state));
+  const totalOrderPrice = withPriority ? totalCartPrice + 20 : totalCartPrice;
+
+  if(cart.length === 0) return <EmptyCart />;
 
   return (
     <div className="my-20 sm:my-24 md:text-lg px-6 sm:px-12">
@@ -96,16 +82,17 @@ function CreateOrder() {
             name="priority"
             id="priority"
             className="size-4 accent-yellow-400"
+            onChange = {() => setWithPriority((withPriority) => !withPriority)}
           />
           <label className="font-semibold" htmlFor="priority">
             Want to yo give your order priority?
           </label>
         </div>
-
+        {/* THIS IS THE CART OPBJECT */}
         <div className="text-center">
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
           <Button disable={disable}>
-            {disable ? "Placing Order..." : "Order now"}
+            {disable ? "Placing Order..." : `Order now on ${formatCurrency(totalOrderPrice)}`}
           </Button>
         </div>
       </Form>
@@ -121,7 +108,7 @@ export async function action({ request }) {
   const order = {
     ...data,
     cart: JSON.parse(data.cart),
-    priority: data.priority === "on" ? true : false,
+    priority: data.priority === "true" ? true : false,
   };
 
   // THIS IS HOW YOU VALIDATE YOUR FEILDS IN FORM
@@ -134,6 +121,9 @@ export async function action({ request }) {
   if (Object.keys(errors).length > 0) return errors;
 
   const newOrder = await createOrder(order);
+
+  // IN THIS WAY YOU CAN DISPATCH ACTIONS DIRECTLY USING STORE (NOT A GOOD THING :- DO IF REQUIRED)
+  store.dispatch(clearCart());  // THERE IS SOME ERROR SEE TO IT 
 
   // THIS REDIRECT METHOD IS INBUILT METHOD SO THAT WE DO NOT NEED TO USE useNavigate()
   return redirect(`/order/${newOrder.id}`);
