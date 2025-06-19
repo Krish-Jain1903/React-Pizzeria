@@ -31,7 +31,14 @@ function CreateOrder() {
 
   // BY THIS HOOK WE GET THE ERROR DATA FROM OUR ACTION
   const formErrors = useActionData();
-  const username = useSelector((state) => state.user.username);
+  const {
+    username,
+    status: addressStatus,
+    position,
+    address,
+    error: addressError,
+  } = useSelector((state) => state.user);
+  const isLoadingAddress = addressStatus === "loading";
   const [withPriority, setWithPriority] = useState(false);
   const totalCartPrice = useSelector((state) => getTotalPrice(state));
   const totalOrderPrice = withPriority ? totalCartPrice + 20 : totalCartPrice;
@@ -39,18 +46,13 @@ function CreateOrder() {
   if (cart.length === 0) return <EmptyCart />;
 
   return (
-    <div className="my-20 sm:my-24 md:text-lg px-6 sm:px-12 sm:flex sm:flex-col sm:items-center sm:justify-center">
-      <h2 className="text-xl mb-6 sm:text-3xl sm:text-center">
-        Ready to order? Let's go!
-      </h2>
-      <Button type="small" onClick={() => dispatch(fetchAddress())}>
-        Get Address
-      </Button>
+    <div className="my-20 sm:my-24 md:text-lg px-6 sm:px-12 sm:flex sm:flex-col">
+      <h2 className="text-xl mb-6 sm:text-3xl">Ready to order? Let's go!</h2>
 
       {/* THIS IS INBUILT FORM COMPONENT AND METHOD ATTRIBUTE IS IMPORTANT */}
       <Form method="POST">
         <div className="py-4 space-y-3 sm:flex sm:items-center sm:gap-8">
-          <label className="sm:basis-36">First Name:-</label>
+          <label className="sm:basis-40">First Name:-</label>
           <div>
             <input
               type="text"
@@ -69,17 +71,42 @@ function CreateOrder() {
           </div>
         </div>
         {formErrors?.phone && (
-          <p className="text-sm text-red-600 font-semibold bg-red-100 py-1 px-2 rounded-md">
+          <p className="text-sm text-red-600 font-semibold bg-red-100 py-1 px-2 rounded-md inline-block">
             {formErrors.phone}
           </p>
         )}
 
         <div className="pb-4 space-y-3 sm:flex sm:items-center sm:gap-8">
-          <label className="sm:basis-36">Address:-</label>
+          <label className="sm:basis-40">Address:-</label>
           <div>
-            <input type="text" name="address" required className="input" />
+            <input
+              type="text"
+              name="address"
+              defaultValue={address}
+              required
+              className="input"
+              disabled={isLoadingAddress}
+            />
           </div>
+
+          {!position.latitude && !position.longitude && (
+            <Button
+              type="small"
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(fetchAddress());
+              }}
+              disable={isLoadingAddress}
+            >
+              Get Address
+            </Button>
+          )}
         </div>
+        {addressStatus === "error" && (
+          <p className="text-sm text-red-600 font-semibold bg-red-100 py-1 px-2 rounded-md inline-block">
+            {addressError}
+          </p>
+        )}
 
         <div className="pb-4 space-x-2 sm:flex sm:items-center sm:gap-2">
           <input
@@ -94,10 +121,20 @@ function CreateOrder() {
             Want to yo give your order priority?
           </label>
         </div>
+
         {/* THIS IS THE CART OPBJECT */}
-        <div className="text-center">
+        <div>
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <Button disable={disable}>
+          <input
+            type="hidden"
+            name="position"
+            value={
+              position.latitude && position.longitude
+                ? `${position.latitude}, ${position.longitude}`
+                : ""
+            }
+          />
+          <Button disable={disable || isLoadingAddress}>
             {disable
               ? "Placing Order..."
               : `Order now on ${formatCurrency(totalOrderPrice)}`}
