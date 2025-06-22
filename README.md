@@ -10,3 +10,13 @@ Currently, two official plugins are available:
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+<h1>Some Usefull Things Learnt in this is :- </h1>
+<ul>
+<li>React Router v6.4 Features :- (Loader Function, Action Function)</li>
+<li>Tailwind CSS</li>
+<li>useLoaderData() Hook</li>
+<li>useNavigationHook() Hook</li>
+<li>useRouteerror() Hook</li>
+<li>useFetcher() Hook</li>
+</ul>
