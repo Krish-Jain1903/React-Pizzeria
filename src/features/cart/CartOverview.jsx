@@ -8,7 +8,7 @@ function CartOverview() {
 
   if (!totalQuantity || !totalPrice) return null;
   return (
-    <div className="bg-stone-800 text-stone-200 py-3 p-4 flex items-center justify-between text-sm sm:p-6 md:text-lg">
+    <div className="bg-stone-800 text-stone-200 py-3 p-4 flex items-center justify-between text-sm sm:p-6 md:text-lg sticky bottom-0">
       <p className="text-stone-300 font-semibold uppercase space-x-3">
         <span>{totalQuantity} pizzas</span>
         <span>{formatCurrency(totalPrice)}</span>

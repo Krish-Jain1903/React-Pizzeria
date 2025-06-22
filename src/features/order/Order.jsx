@@ -6,9 +6,10 @@ import {
   formatDate,
 } from "../../utils/helpers";
 import { getOrder } from "../../services/apiRestaurant";
-import { useLoaderData } from "react-router-dom";
+import { useFetcher, useLoaderData } from "react-router-dom";
 
 import OrderItem from "./OrderItem";
+import { useEffect } from "react";
 
 function Order() {
   const order = useLoaderData();
@@ -23,6 +24,20 @@ function Order() {
     cart,
   } = order;
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
+
+  // THIS IS A NEW IN BUILT HOOK YOU NOT NEED TO GO TO USE NAVIGATE
+  // THIS IS USED WHEN YOU WANT TO FETCH DATA OF OTHER ROUTE TO ANY OTHER ROUTE
+  // HERE THIS IS FETCHING MENU ROUTE DATA IN ORDER ROUTE
+  const fetcher = useFetcher();
+
+  useEffect(
+    function () {
+      if (!fetcher.data && fetcher.state === "idle") fetcher.load("/menu");
+    },
+    [fetcher]
+  );
+
+  console.log(fetcher.data);
 
   return (
     <div className="space-y-6">
@@ -53,7 +68,16 @@ function Order() {
 
       <ul className="divide-y divide-stone-200 border-y border-stone-200">
         {cart.map((pizza) => {
-          return <OrderItem item={pizza} key={pizza.pizzaId} />;
+          return (
+            <OrderItem
+              item={pizza}
+              key={pizza.pizzaId}
+              ingredients={
+                fetcher?.data?.find((el) => el.id === pizza.pizzaId).ingredients
+              }
+              isLoadingIngredients={fetcher.state === "loading"}
+            />
+          );
         })}
       </ul>
 
